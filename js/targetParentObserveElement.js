@@ -1,32 +1,31 @@
-/* ************************* */
-/* HTML Target Parent's Observe */
-/* ************************* */
+/* ************************************
+HTML Target Parent's Observe
+The objective is to be able to visualize the structure of the html by visualizing the edges 
+of the right-clicked element (contextual menu), it is marked with random colors.
+If you right-click more than once, the border of the parent element will 
+be shown
+************************************ */
 
-/*
-	The objective is to be able to visualize the structure of the html by visualizing the edges 
-	of the element that is right-clicked (contextual menu), it is marked with random colors.
-	If you right-click more than once, the border of the parent element will 
-	be shown, each time higher until reaching the body, which is the last element to which 
-	the border will be marked;
-*/
 window.addEventListener("contextmenu", targetParentObserve, false);
 
-/* VARIABLES - We save here the elements that we are going to mark */
+
+
+/* ********************************************** */
+/* VARIABLES - To save the elements we are going to mark */
+/* ********************************************** */
 var targetParentObserveElement = [null];
 
 
+
+/* ******************* */
 /* PRINCIPAL FUNCTION */
+/* ******************* */
 function targetParentObserve(e) {
 
-
-	/* Save the event in a variable and not to show the contextual menu */
 	evento = e;
 	evento.preventDefault();
 
-
-	/* We call the targetParentObserveWho to define Who is the element we will mark */
 	targetParentObserveWho(evento.target);
-
 
 	/* If the Control key is pressed we will erase the marked edges */
 	if (evento.ctrlKey == true) {
@@ -34,10 +33,7 @@ function targetParentObserve(e) {
 	} else {
 
 		/* Mark the edge of the last element in the targetParentObserveElement array with a random color */
-		let tamArray = targetParentObserveElement.length;
-		let color=targetParentObserveRandomColor();
-		targetParentObserveElement[tamArray - 1].style.border = "3px dashed " + color;
-		document.getElementById("targetParentObserve").style.color=color;
+		targetParentObserveMarker();
 
 		/* You will see a notification with the name of the marked element */
 		targetParentObserveNotif();
@@ -45,15 +41,19 @@ function targetParentObserve(e) {
 }
 
 
-/* QUIEN - Check if the last element is marked */
+
+/* ******************************* */
+/* To define which element will be marked */
+/* ******************************* */
 function targetParentObserveWho(target) {
 
-	let who = target;/* We received the target element to add it to the array */
+	let who = target;/* We receive the element to add it to the array */
 
-	if (targetParentObserveElement[0] == null) {/* this is when we havent marked any element */
+	if (targetParentObserveElement[0] == null) {
+		/* when we havent marked any element */
 		targetParentObserveElement[0] = who;
 	} else {
-		/* If there are elements in the array, push the parent of the last element */
+		/* If there are more than one element in the array, push the parent of the last element */
 		let tamArray = targetParentObserveElement.length;
 		if (targetParentObserveElement[tamArray - 1] != document.body) {
 			targetParentObserveElement.push(targetParentObserveElement[tamArray - 1].parentNode);
@@ -62,7 +62,10 @@ function targetParentObserveWho(target) {
 }
 
 
-/* RANDOM COLOR */
+
+/* ******************************* */
+/* Random color for the css outline style */
+/* ****************************** */
 function targetParentObserveRandomColor() {
 	let color = "rgb(";
 	color += Math.floor((Math.random() * 250) + 50) + ",";
@@ -72,17 +75,35 @@ function targetParentObserveRandomColor() {
 }
 
 
-/* Remove the edge color on each element of the array and reset the array */
+
+/* ******************************* */
+/* Remove the edge and reset the array */
+/* ******************************* */
 function targetParentObserveNone() {
 	for (let x in targetParentObserveElement) {
-		targetParentObserveElement[x].style.border = "none";
+		targetParentObserveElement[x].style.outline = "none";
 	}
 	targetParentObserveElement=[null];
 	document.getElementById("targetParentObserve").style.display="none";
 }
 
 
-/* The notification */
+
+/* *********************************** */
+/* To mark the edge with an outline css style */
+/* *********************************** */
+function targetParentObserveMarker(){
+	let tamArray = targetParentObserveElement.length;
+	let color=targetParentObserveRandomColor();
+	targetParentObserveElement[tamArray - 1].style.outline = "3px solid " + color;
+	document.getElementById("targetParentObserve").style.color=color;
+}
+
+
+
+/* ******************* */
+/* To show the notification */
+/* ******************* */
 function targetParentObserveNotif() {
 
 	/* Who is the last element in the array */
@@ -99,6 +120,9 @@ function targetParentObserveNotif() {
 
 
 
+/* ****************** */
+/* Create the notification */
+/* ****************** */
 function notif(){
 	/* Create the div Element to show the notification... and the element style */
 	let div = document.createElement("div")
@@ -111,9 +135,11 @@ function notif(){
 	div.style.right = "50%";
 	div.style.display="none";
 	div.style.fontSize="20px";
-	div.style.opacity=".9";
+	div.style.opacity=".8";
 	div.style.transform="translate(-50%,-50%,0)";
 	div.style.zIndex="100";
+
+	/* The notification will disappear with a click event */
 	div.onclick=function(){this.style.display="none";}
 
 	/* add the element to the body */
