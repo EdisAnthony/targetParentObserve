@@ -15,7 +15,7 @@ window.addEventListener("contextmenu", targetParentObserve, false);
 var targetParentObserveElement = [null];
 
 
-/* PRINCIPAL FUNCTION */
+/* MAIN FUNCTION */
 function targetParentObserve(e) {
 
 
@@ -87,14 +87,14 @@ function targetParentObserveNotif() {
 
 	/* Who is the last element in the array */
 	let tamArray = targetParentObserveElement.length;
-	node = targetParentObserveElement[tamArray - 1].nodeName;
+	node = targetParentObserveElement[tamArray - 1];
 	
 	/* Show the notification */
 	let divT = document.getElementById("targetParentObserve");
 	divT.style.display="block";
 	
 	/* Inner the element with the element name */
-	divT.innerHTML = node;
+	divT.innerHTML = `${node.nodeName} - display: ${getComputedStyle(node).display}`;
 }
 
 
